@@ -74,6 +74,9 @@ class CFBScores:
             # Halftime
             if newGame['time'] == "Halftime" and newGame['time'] != oldGame['time']:
                 self.announceScore(irc_c, newGame)
+            # After halftime
+            if oldGame['time'] == "Halftime" and newGame['time'] != oldGame['time']:
+                self.announceScore(irc_c, newGame)
 
             if newGame['status'] == GAME_STATUS_IN:
                 chgHome = newGame['homescore'] - oldGame['homescore']
@@ -201,7 +204,7 @@ class CFBScores:
             elif chgHome == 0 and chgAway == 0:
                 if "down" in game:
                     output += " | %s" % game['down']
-                if "lastplay" in game:
+                if "lastplay" in game and game['time'] != "Halftime":
                     output += " (Last play: %s)" % game['lastplay']
 
             if "network" in game:
