@@ -71,6 +71,10 @@ class CFBScores:
                     self.announceScore(irc_c, newGame, prefix="Game Ended: ")
                 continue
 
+            # Halftime
+            if newGame['time'] == "Halftime" and newGame['time'] != oldGame['time']:
+                self.announceScore(irc_c, newGame)
+
             if newGame['status'] == GAME_STATUS_IN:
                 chgHome = newGame['homescore'] - oldGame['homescore']
                 chgAway = newGame['awayscore'] - oldGame['awayscore']
@@ -104,10 +108,7 @@ class CFBScores:
 
     @keyword("score")
     def score(self, irc_c, msg, trigger, args, kargs):
-        try:
-            team = msg.args.strip().split(' ', 2)[2].lower()
-        except:
-            return
+        team = ' '.join(args).lower()
         for gameid, game in self.fbs.items():
             if team == game['hometeam'].lower() or \
                  team == game['awayteam'].lower():
@@ -115,7 +116,7 @@ class CFBScores:
 
     @keyword("whatson")
     def whatson(self, irc_c, msg, trigger, args, kargs):
-        reply = ""
+        reply = "Games on TV: "
         first = True
         for gameid, game in self.fbs.items():
             if game['status'] == GAME_STATUS_IN and "network" in game:
@@ -126,6 +127,19 @@ class CFBScores:
                 reply += self.getShortGameDesc(game)
         irc_c.PRIVMSG(msg.sender.nick, reply)
 
+    @keyword("closegames")
+    def closegames(self, irc_c, msg, trigger, args, kargs):
+        reply = "Close Games: "
+        first = True
+        for gameid, game in self.fbs.items():
+            diff = abs(game['homescore'] - game['awayscore'])
+            if game['status'] == GAME_STATUS_IN and diff <= 10:
+                if first:
+                    first = False
+                else:
+                    reply += " | "
+                reply += self.getShortGameDesc(game)
+        irc_c.PRIVMSG(msg.sender.nick, reply)
 
     def announceScore(self, irc_c, game, chgHome = 0, chgAway = 0, prefix = ""):
         msg = prefix + self.getLongGameDesc(game, chgHome, chgAway)
