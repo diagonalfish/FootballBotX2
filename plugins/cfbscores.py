@@ -1,6 +1,7 @@
 import time
 from urllib.request import urlopen, Request
 import json
+import html
 from dateutil import tz, parser as dateparser
 from fake_useragent import UserAgent
 from pyaib.plugins import every, keyword, plugin_class
@@ -277,14 +278,20 @@ class CFBScores:
                 game['status'] = GAME_STATUS_IN
             else:
                 game['status'] = GAME_STATUS_POST
-            team1 = event['competitions'][0]['competitors'][0]['team']['location']
+            team1 = html.unescape(event['competitions'][0]['competitors'][0]['team']['location'])
             tid1 = event['competitions'][0]['competitors'][0]['id']
             score1 = int(event['competitions'][0]['competitors'][0]['score'])
             team1abv = event['competitions'][0]['competitors'][0]['team']['abbreviation']
-            team2 = event['competitions'][0]['competitors'][1]['team']['location']
+            team2 = html.unescape(event['competitions'][0]['competitors'][1]['team']['location'])
             tid2 = event['competitions'][0]['competitors'][1]['id']
             score2 = int(event['competitions'][0]['competitors'][1]['score'])
             team2abv = event['competitions'][0]['competitors'][1]['team']['abbreviation']
+
+            # Hawaii workaround
+            if team1 == "Hawai'i":
+                team1 = "Hawaii"
+            if team2 == "Hawai'i":
+                team2 = "Hawaii"
 
             homestatus = event['competitions'][0]['competitors'][0]['homeAway']
 
