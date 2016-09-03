@@ -30,6 +30,8 @@ class CFBScores:
         self.mode = MODE_ACTIVE
         self.fbs = {}
 
+        self.abbrv = json.load(open("abbrv.json"))
+
     def ircLog(self, irc_c, msg):
         print("cfbscores: " + msg)
         irc_c.PRIVMSG(self.config.debug_chan, msg)
@@ -109,13 +111,40 @@ class CFBScores:
         else:
             return None
 
-    @keyword("score")
+    def deAbbreviate(self, team):
+        for abteam, abbrvs in self.abbrv.items():
+            if team.lower() in abbrvs:
+                print("Converted %s to %s (abbreviation)" % (team, abteam))
+                team = abteam
+                break
+        return team
+
+    @keyword("score", "sc", "s")
     def score(self, irc_c, msg, trigger, args, kargs):
         team = ' '.join(args).lower()
+        print("!score:", msg.sender, team)
+        team = self.deAbbreviate(team)
         for gameid, game in self.fbs.items():
             if team == game['hometeam'].lower() or \
                  team == game['awayteam'].lower():
                 msg.reply(self.getLongGameDesc(game))
+                return
+        msg.reply("%s: Can't find a game for that team (%s)." % (msg.sender.nick, team))
+
+    @keyword("odds", "line")
+    def line(self, irc_c, msg, trigger, args, kargs):
+        team = ' '.join(args).lower()
+        team = self.deAbbreviate(team)
+        for gameid, game in self.fbs.items():
+            if team == game['hometeam'].lower() or \
+                            team == game['awayteam'].lower():
+                if "odds" in game:
+                    msg.reply("%s @ %s Odds: %s " % (game['awayteam'], game['hometeam'], game['odds']))
+                else:
+                    msg.reply("%s: No odds available for %s @ %s." % (msg.sender.nick,
+                                                                      game['awayteam'], game['hometeam']))
+                return
+        msg.reply("%s: Can't find a game for that team (%s)." % (msg.sender.nick, team))
 
     @keyword("whatson")
     def whatson(self, irc_c, msg, trigger, args, kargs):
@@ -288,6 +317,13 @@ class CFBScores:
                 game['location'] += ", " + event['competitions'][0]['venue']['address']['state']
             except:
                 pass
+
+            try:
+                game['odds'] = event['competitions'][0]['odds'][0]['details']
+                game['odds'] += " (O/U: %s)" % event['competitions'][0]['odds'][0]['overUnder']
+            except:
+                pass
+
 
             gid = event['id']
             games[gid] = game
