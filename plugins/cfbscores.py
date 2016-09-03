@@ -68,6 +68,8 @@ class CFBScores:
             # Check for state change
             if newGame['status'] != oldGame['status']:
                 if newGame['status'] == GAME_STATUS_IN:
+                    # TODO: Make sure ESPN isn't messing with us. Cache past status for this game?
+
                     self.announceScore(irc_c, newGame, prefix="Game Started: ")
                 elif newGame['status'] == GAME_STATUS_POST:
                     self.announceScore(irc_c, newGame, prefix="Game Ended: ")
@@ -99,15 +101,17 @@ class CFBScores:
 
     def getScoringDesc(self, change):
         if change == 1:
-            return "extra point GOOD"
+            return "Extra Point GOOD"
         elif change == 2:
-            return "2-point conversion GOOD"
+            return "+2 Points"
         elif change == 3:
-            return "FIELD GOAL"
+            return "Field Goal GOOD!"
         elif change == 6:
             return "TOUCHDOWN!"
         elif change == 7:
-            return "TOUCHDOWN! (+XP)"
+            return "TOUCHDOWN! (+XP GOOD)"
+        elif change == 8:
+            return "TOUCHDOWN! (+2 PT GOOD)"
         else:
             return None
 
