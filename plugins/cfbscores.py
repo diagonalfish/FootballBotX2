@@ -213,14 +213,15 @@ class CFBScores:
             if "network" in game:
                 output += " [TV: %s]" % game['network']
         elif game['status'] == GAME_STATUS_POST:
-            output += "%s %d @ %s %d - FINAL" % (bold(game['awayteam']), game['awayscore'],
-                                                 bold(game['hometeam']), game['homescore'])
+            output += "%s %d @ %s %d - %s" % (bold(game['awayteam']), game['awayscore'],
+                                              bold(game['hometeam']), game['homescore'],
+                                              game['time'])
         elif game['status'] == GAME_STATUS_IN:
             output += "%s %d" % (bold(game['awayteam']), game['awayscore'])
-            if "possess" in game and game['possess'] == "home":
+            if "possess" in game and game['possess'] == "away":
                 output += " <-"
             output += " @"
-            if "possess" in game and game['possess'] == "away":
+            if "possess" in game and game['possess'] == "home":
                 output += " ->"
             output += " %s %d" % (bold(game['hometeam']), game['homescore'])
 
