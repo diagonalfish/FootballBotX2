@@ -128,6 +128,10 @@
   "fl st",
   "fsu"
  ],
+ "fresno state": [
+  "fresno",
+  "fresno st"
+ ],
  "georgia": [
   "dwags",
   "uga",
@@ -226,11 +230,12 @@
   "msu",
   "michst"
  ],
- "minnesotta": [
-  "minn"
- ],
- "minnestoa": [
-  "minny"
+ "minnesota": [
+  "minn",
+  "minny",
+  "gophers",
+  "dillybars",
+  "dilly bar"
  ],
  "mississippi state": [
   "miss state",
@@ -280,7 +285,8 @@
  ],
  "notre dame": [
   "nd",
-   "irish",
+  "noter dame", 
+  "irish",
   "domers"
  ],
  "ohio state": [
@@ -334,7 +340,8 @@
  ],
  "rutgers": [
   "rut",
-   "ru"
+   "ru",
+  "buttgers"
  ],
  "sam houston state": [
   "shsu"
@@ -453,6 +460,9 @@
  ],
  "washington state": [
   "wazzu",
+  "wazzy",
+  "cougs",
+  "cuogs",
   "wsu"
  ],
  "west virginia": [
@@ -462,8 +472,11 @@
  "western kentucky": [
   "wku"
  ],
- "william & mary": [
-  "wmu"
+ "western michigan": [
+  "wmu",
+  "row the boat",
+  "rowtheboat",
+  "pj fleck"
  ],
  "wisconsin": [
   "wiscy",
