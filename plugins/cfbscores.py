@@ -2,6 +2,7 @@ import time
 from urllib.request import urlopen, Request
 import json
 import html
+import fbbot.thirdparty.pickledb
 from dateutil import tz, parser as dateparser
 from fake_useragent import UserAgent
 from pyaib.plugins import every, keyword, plugin_class
@@ -30,6 +31,7 @@ class CFBScores:
         self.lastUpdate = 0
         self.mode = MODE_ACTIVE
         self.fbs = {}
+        self.fbsOdds = fbbot.thirdparty.pickledb.load('oddsCache.db', False)
 
         self.abbrv = json.load(open("abbrv.json"))
 
@@ -42,12 +44,10 @@ class CFBScores:
         curTime = time.time()
         if self.mode == MODE_INACTIVE:
             if curTime - self.lastUpdate < self.config.inactive_freq:
-                print("updateScores: Inactive mode, waiting")
                 return
 
         newData = {}
         try:
-            print("Updating FBS score data...")
             newData = self.getGames("fbs")
         except Exception as ex:
             self.ircLog(irc_c, "Error retrieving scores: " + str(ex))
@@ -65,6 +65,12 @@ class CFBScores:
                 #    self.announceScore(irc_c, newGame)
                 continue
             oldGame = self.fbs[gameID]
+
+            # Cache betting lines
+            cachedOdds = self.fbsOdds.get(gameID)
+            if "odds" in newGame and (cachedOdds is None or cachedOdds != newGame['odds']):
+                print("Cached odds for %s: %s" % (gameID, newGame['odds']))
+                self.fbsOdds.set(gameID, newGame['odds'])
 
             # Check for state change
             if newGame['status'] != oldGame['status']:
@@ -91,14 +97,15 @@ class CFBScores:
 
         self.fbs = newData
         if activeGames and self.mode == MODE_INACTIVE:
-            self.ircLog(irc_c, "At least one game is active, enabling active mode.")
+            self.ircLog(irc_c, "At least one game is active. Updating scores every 10 seconds.")
             self.mode = MODE_ACTIVE
         elif not activeGames and self.mode == MODE_ACTIVE:
-            self.ircLog(irc_c, "All games are inactive, disabling active mode.")
+            self.ircLog(irc_c, "All games are inactive. Updating scores every %d seconds until another game becomes active."
+                        % self.config.inactive_freq)
             self.mode = MODE_INACTIVE
 
         self.lastUpdate = curTime
-
+        self.fbsOdds.dump()
 
     def getScoringDesc(self, change):
         if change == 1:
@@ -127,7 +134,7 @@ class CFBScores:
     @keyword("score", "sc", "s")
     def score(self, irc_c, msg, trigger, args, kargs):
         team = ' '.join(args).lower()
-        print("!score:", msg.sender, team)
+        print("!score - %s - %s" % (msg.sender, team))
         team = self.deAbbreviate(team)
         for gameid, game in self.fbs.items():
             if team == game['hometeam'].lower() or \
@@ -139,12 +146,17 @@ class CFBScores:
     @keyword("odds", "line")
     def line(self, irc_c, msg, trigger, args, kargs):
         team = ' '.join(args).lower()
+        print("!line - %s - %s" % (msg.sender, team))
         team = self.deAbbreviate(team)
         for gameid, game in self.fbs.items():
             if team == game['hometeam'].lower() or \
                             team == game['awayteam'].lower():
                 if "odds" in game:
                     msg.reply("%s @ %s Odds: %s " % (game['awayteam'], game['hometeam'], game['odds']))
+                elif self.fbsOdds.get(gameid) is not None:
+                    # Cached
+                    print("Retrieved cached odds for %s" % gameid)
+                    msg.reply("%s @ %s Odds: %s " % (game['awayteam'], game['hometeam'], self.fbsOdds.get(gameid)))
                 else:
                     msg.reply("%s: No odds available for %s @ %s." % (msg.sender.nick,
                                                                       game['awayteam'], game['hometeam']))
@@ -153,6 +165,7 @@ class CFBScores:
 
     @keyword("whatson")
     def whatson(self, irc_c, msg, trigger, args, kargs):
+        print("!whatson - %s" % msg.sender)
         reply = "Games on TV: "
         first = True
         for gameid, game in self.fbs.items():
@@ -166,6 +179,7 @@ class CFBScores:
 
     @keyword("closegames")
     def closegames(self, irc_c, msg, trigger, args, kargs):
+        print("!closegames - %s" % msg.sender)
         reply = "Close Games: "
         first = True
         for gameid, game in self.fbs.items():
