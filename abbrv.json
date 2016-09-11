@@ -6,7 +6,7 @@
   "uconn",
    "conn"
  ],
- "louisiana-monroe": [
+ "louisiana monroe": [
   "ulm"
  ],
  "south alabama": [
@@ -49,7 +49,8 @@
   "au",
   "aubrun",
   "war eagle",
-  "awburn"
+  "awburn",
+  "barners"
  ],
  "baylor": [
   "bay"
@@ -180,6 +181,9 @@
  "kentucky": [
   "uk"
  ],
+ "louisiana lafayette": [
+  "ull"
+ ],
  "louisiana tech": [
   "latech"
  ],
@@ -195,11 +199,12 @@
  "maryland": [
   "umd",
   "md",
-   "terps",
-   "turtles"
+  "terps",
+  "turtles"
  ],
- "massachussets": [
-  "umass"
+ "massachusetts": [
+  "umass",
+  "massachussets"
  ],
  "memphis": [
   "mem"
@@ -346,9 +351,10 @@
  "sam houston state": [
   "shsu"
  ],
- "san jose state": [
+ "san josé state": [
   "san jose",
-   "sjsu"
+  "sjsu",
+  "san jose state"
  ],
  "smu": [
   "southern methodist "
