@@ -53,7 +53,9 @@
   "barners"
  ],
  "baylor": [
-  "bay"
+  "bay",
+  "baylol",
+  "baylour"
  ],
  "big 12": [
   "big12"
@@ -102,6 +104,9 @@
  "colorado state": [
   "csu"
  ],
+ "duke": [
+  "dook"
+ ],
  "east carolina": [
   "ecu"
  ],
@@ -125,6 +130,7 @@
   "flst",
   "noles",
   "crablegs",
+  "crab legs",
   "seminoles",
   "fl st",
   "fsu"
@@ -140,10 +146,13 @@
  ],
  "georgia southern": [
   "gaso",
+  "gasouthern",
   "gsu"
  ],
  "georgia state": [
-  "state"
+  "state",
+  "gastate",
+  "gast"
  ],
  "georgia tech": [
   "nerds",
@@ -152,7 +161,8 @@
   "gatech"
  ],
  "houston": [
-  "hou"
+  "hou",
+  "coogs"
  ],
  "illinois": [
   "uiuc",
@@ -168,7 +178,8 @@
   "jville"
  ],
  "kansas": [
-  "ku"
+  "ku",
+  "jayhawks"
  ],
  "kansas state": [
   "k-state",
@@ -176,7 +187,8 @@
   "kst",
   "ksu",
   "ks",
-  "k state"
+  "k state",
+  "wizard"
  ],
  "kentucky": [
   "uk"
@@ -193,7 +205,7 @@
  ],
  "lsu": [
   "corndogs",
-  "tigers",
+  "louisiana state",
   "louisiana state university"
  ],
  "maryland": [
@@ -220,15 +232,16 @@
   "da u"
  ],
  "miami (oh)": [
-  "mu"
+  "mu",
+  "miami ohio"
  ],
  "michigan": [
   "mich",
   "mich",
   "umich",
   "khakis",
-   "harbaugh",
-   "um"
+  "harbaugh",
+  "um"
  ],
  "michigan state": [
   "sparty",
@@ -261,22 +274,22 @@
  ],
  "nc state": [
   "ncst",
-     "ncsu",
-   "wolfpack"
+  "ncsu",
+  "wolfpack"
  ],
  "nebraska": [
   "neb",
-     "huskers",
+  "huskers",
   "unl",
    "corn"
  ],
  "new mexico": [
   "unm",
-     "bob davie"
+  "bob davie"
  ],
  "north carolina": [
   "nc",
-   "unc"
+  "unc"
  ],
  "north dakota state": [
   "ndsu"
@@ -317,21 +330,14 @@
  "oregon": [
   "ducks",
   "ore",
-  "uo"
+  "uo",
+  "quack"
  ],
  "oregon state": [
   "orst"
  ],
  "osu": [
   "buckeyes"
- ],
- "pac 12": [
-  "pac12",
-  "pac",
-  "p12"
- ],
- "patriots": [
-  "pats"
  ],
  "penn state": [
   "psu"
@@ -341,11 +347,11 @@
  ],
  "purdue": [
   "purdont",
-   "boilermakers"
+  "boilermakers"
  ],
  "rutgers": [
   "rut",
-   "ru",
+  "ru",
   "buttgers"
  ],
  "sam houston state": [
@@ -362,7 +368,6 @@
  "south carolina": [
   "cocks",
   "sakerlina",
-  "spurrier",
   "gamecocks",
   "s car",
   "carolina",
@@ -371,7 +376,7 @@
  ],
  "south florida": [
   "usf",
-   "bulls"
+  "bulls"
  ],
  "southern utah": [
   "suu"
@@ -380,7 +385,7 @@
   "stanny",
   "trees",
   "stan",
-   "furd"
+  "furd"
  ],
  "syracuse": [
   "syr",
@@ -390,20 +395,24 @@
   "frogs"
  ],
  "tennessee": [
-  "lols",
+  "checkers",
+  "smokey",
   "tenn",
   "vols",
   "ten"
  ],
  "tennessee tech": [
-  "tenn tech"
+  "tenn tech",
+  "tntech",
+  "tn tech"
  ],
  "tennessee-martin": [
-  "tenn martin"
+  "tenn martin",
+  "utm"
  ],
  "texas": [
   "texsa",
-   "taxes",
+  "taxes",
   "tejas",
   "tex",
   "longhorns",
@@ -426,19 +435,18 @@
   "tt",
   "ttu",
   "ttech",
-   "tortillas"
+  "tortillas",
+  "sunglasses"
  ],
  "the citadel": [
   "citadel"
  ],
  "usc": [
   "uscw",
-   "southern cal"
- ],
- "utah st": [
-  "usu"
+  "southern cal"
  ],
  "utah state": [
+  "usu",
   "utah st"
  ],
  "utica college": [
@@ -447,9 +455,10 @@
  "vanderbilt": [
   "vandy"
  ],
-  "virginia": [
-    "uva"
-  ],
+ "virginia": [
+  "uva",
+  "va"
+ ],
  "virginia tech": [
   "vatech",
   "vt",
@@ -473,10 +482,12 @@
  ],
  "west virginia": [
   "wvu",
-  "wv"
+  "wv",
+  "couches"
  ],
  "western kentucky": [
-  "wku"
+  "wku",
+  "hilltoppers"
  ],
  "western michigan": [
   "wmu",
