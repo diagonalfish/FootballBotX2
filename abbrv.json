@@ -12,6 +12,12 @@
  "south alabama": [
   "usa"
  ],
+ "air force": [
+  "airforce",
+  "usafa",
+  "usaf",
+  "af"
+ ],
  "akron": [
   "akr"
  ],
@@ -30,7 +36,8 @@
  ],
  "arizona state": [
   "asu",
-  "azst"
+  "azst",
+  "sparky"
  ],
  "arkansas": [
   "ark",
@@ -78,7 +85,8 @@
   "bgsu"
  ],
  "byu": [
-  "mormons"
+  "mormons",
+  "lds"
  ],
  "california": [
   "cal"
