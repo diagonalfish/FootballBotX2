@@ -107,7 +107,9 @@
  "colorado": [
   "col",
   "cu",
-  "co"
+  "co",
+  "buffs",
+  "buffaloes"
  ],
  "colorado state": [
   "csu"
@@ -182,7 +184,8 @@
   "hawkeyes"
  ],
  "iowa state": [
-  "isu"
+  "isu",
+  "iowa st"
  ],
  "jacksonville": [
   "jville"
@@ -355,7 +358,8 @@
   "buckeyes"
  ],
  "penn state": [
-  "psu"
+  "psu",
+  "penn st"
  ],
  "pittsburgh": [
   "pitt"
