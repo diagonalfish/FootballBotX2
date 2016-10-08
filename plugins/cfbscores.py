@@ -32,6 +32,7 @@ class CFBScores:
         self.mode = MODE_ACTIVE
         self.fbs = {}
         self.fbsOdds = fbbot.thirdparty.pickledb.load('oddsCache.db', False)
+        self.halftimes = {}
 
         self.abbrv = json.load(open("abbrv.json"))
 
@@ -85,9 +86,12 @@ class CFBScores:
             # Halftime
             if newGame['time'] == "Halftime" and newGame['time'] != oldGame['time']:
                 self.announceScore(irc_c, newGame)
+                self.halftimes[gameID] = time.time()
             # After halftime
             if oldGame['time'] == "Halftime" and newGame['time'] != oldGame['time']:
-                self.announceScore(irc_c, newGame)
+                self.announceScore(irc_c, newGame, endhalf=True)
+                if gameID in self.halftimes:
+                    del self.halftimes[gameID]
 
             if newGame['status'] == GAME_STATUS_IN:
                 chgHome = newGame['homescore'] - oldGame['homescore']
@@ -192,8 +196,8 @@ class CFBScores:
                 reply += self.getShortGameDesc(game)
         irc_c.PRIVMSG(msg.sender.nick, reply)
 
-    def announceScore(self, irc_c, game, chgHome = 0, chgAway = 0, prefix = ""):
-        msg = prefix + self.getLongGameDesc(game, chgHome, chgAway)
+    def announceScore(self, irc_c, game, chgHome = 0, chgAway = 0, endhalf=False, prefix =""):
+        msg = prefix + self.getLongGameDesc(game, chgHome, chgAway, endhalf=endhalf)
         print("Score announcement: " + msg)
         for channel in self.config.live_chans:
             irc_c.PRIVMSG(channel, msg)
@@ -218,7 +222,7 @@ class CFBScores:
                                              game['time'])
             return output
 
-    def getLongGameDesc(self, game, chgHome = 0, chgAway = 0):
+    def getLongGameDesc(self, game, chgHome = 0, chgAway = 0, endhalf=False):
         output = ""
         if game['status'] == GAME_STATUS_PRE:
             output += "%s @ %s - %s - %s" % (bold(game['awayteam']), bold(game['hometeam']),
@@ -231,6 +235,7 @@ class CFBScores:
                                               bold(game['hometeam']), game['homescore'],
                                               game['time'])
         elif game['status'] == GAME_STATUS_IN:
+            halftime = "Halftime" in game['time']
             output += "%s %d" % (bold(game['awayteam']), game['awayscore'])
             if "possess" in game and game['possess'] == "away":
                 output += " <-"
@@ -249,21 +254,28 @@ class CFBScores:
                 sDesc = self.getScoringDesc(chgAway)
                 if sDesc is not None:
                     output += " - %s" % underline(game['awayteam'] + " " + sDesc)
-
-            elif chgHome == 0 and chgAway == 0:
+            elif chgHome == 0 and chgAway == 0 and not halftime:
                 if "down" in game:
                     output += " | %s" % game['down']
-                if "lastplay" in game and game['time'] != "Halftime":
+                if "lastplay" in game and not endhalf:
                     output += " (Last play: %s)" % game['lastplay']
+
+            if halftime and game['id'] in self.halftimes:
+                # Estimate time remaining for halftime
+                htimeleft = 1200 - int(time.time() - self.halftimes[game['id']])
+                if htimeleft < 0:
+                    htimeleft = 0
+                hm, hs = divmod(htimeleft, 60)
+                output += " (Est. time left: %02d:%02d)" % (hm, hs)
 
             if "network" in game:
                 output += " [TV: %s]" % game['network']
 
         return output
 
-#    def getGames(self, league="fbs"):
-#        with open('data.json') as data_file:
-#            return json.load(data_file)
+    #def getGames(self, league="fbs"):
+    #    with open('data.json') as data_file:
+    #        return json.load(data_file)
 
     # Primary magic happens here
     def getGames(self, league="fbs"):
@@ -352,5 +364,6 @@ class CFBScores:
 
 
             gid = event['id']
+            game['id'] = gid # Redundant but useful when passing game objects around.
             games[gid] = game
         return games
