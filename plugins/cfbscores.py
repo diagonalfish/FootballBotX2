@@ -40,7 +40,7 @@ class CFBScores:
         print("cfbscores: " + msg)
         irc_c.PRIVMSG(self.config.debug_chan, msg)
 
-    @every(10, "scoreupdate")
+    @every(20, "scoreupdate")
     def updateScores(self, irc_c, event):
         curTime = time.time()
         if self.mode == MODE_INACTIVE:
@@ -53,6 +53,7 @@ class CFBScores:
         except Exception as ex:
             self.ircLog(irc_c, "Error retrieving scores: " + str(ex))
             self.lastUpdate = curTime
+            return
 
         activeGames = False
         for gameID in newData.keys():
@@ -147,7 +148,7 @@ class CFBScores:
                 return
         msg.reply("%s: Can't find a game for that team (%s)." % (msg.sender.nick, team))
 
-    @keyword("odds", "line")
+    @keyword("odds", "line", "spread", "l")
     def line(self, irc_c, msg, trigger, args, kargs):
         team = ' '.join(args).lower()
         print("!line - %s - %s" % (msg.sender, team))
