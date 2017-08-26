@@ -180,7 +180,10 @@ class CFBScores:
                 else:
                     reply += " | "
                 reply += self.getShortGameDesc(game)
-        irc_c.PRIVMSG(msg.sender.nick, reply)
+        if first == False:
+            irc_c.PRIVMSG(msg.sender.nick, reply)
+        else:
+            msg.reply("%s: No games are on TV right now. Sorry!" % (msg.sender.nick))
 
     @keyword("closegames")
     def closegames(self, irc_c, msg, trigger, args, kargs):
@@ -286,7 +289,7 @@ class CFBScores:
         # Other leagues go here
 
         req = Request("http://espn.go.com/college-football/scoreboard/_/group/" +
-                      type + "/year/2016/seasontype/2/?t=" + str(time.time()))
+                      type + "/year/2017/seasontype/2/?t=" + str(time.time()))
         req.headers["User-Agent"] = self.ua
         # Load data
         scoreData = urlopen(req).read().decode("utf-8")
