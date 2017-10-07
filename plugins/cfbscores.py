@@ -2,6 +2,7 @@ import time
 from urllib.request import urlopen, Request
 import json
 import html
+from collections import deque
 import fbbot.thirdparty.pickledb
 from dateutil import tz, parser as dateparser
 from fake_useragent import UserAgent
@@ -33,6 +34,7 @@ class CFBScores:
         self.fbs = {}
         self.fbsOdds = fbbot.thirdparty.pickledb.load('oddsCache.db', False)
         self.halftimes = {}
+        self.recentAnnounce = deque(maxlen=100)
 
         self.abbrv = json.load(open("abbrv.json"))
 
@@ -78,7 +80,6 @@ class CFBScores:
             if newGame['status'] != oldGame['status']:
                 if newGame['status'] == GAME_STATUS_IN:
                     # TODO: Make sure ESPN isn't messing with us. Cache past status for this game?
-
                     self.announceScore(irc_c, newGame, prefix="Game Started: ")
                 elif newGame['status'] == GAME_STATUS_POST:
                     self.announceScore(irc_c, newGame, prefix="Game Ended: ")
@@ -148,7 +149,7 @@ class CFBScores:
                 return
         msg.reply("%s: Can't find a game for that team (%s)." % (msg.sender.nick, team))
 
-    @keyword("odds", "line", "spread", "l")
+    @keyword("odds", "line", "spread", "l", "o")
     def line(self, irc_c, msg, trigger, args, kargs):
         team = ' '.join(args).lower()
         print("!line - %s - %s" % (msg.sender, team))
@@ -202,7 +203,11 @@ class CFBScores:
 
     def announceScore(self, irc_c, game, chgHome = 0, chgAway = 0, endhalf=False, prefix =""):
         msg = prefix + self.getLongGameDesc(game, chgHome, chgAway, endhalf=endhalf)
+        if msg in self.recentAnnounce:
+            print("Redundant score announcement suppressed: " + msg)
+            return
         print("Score announcement: " + msg)
+        self.recentAnnounce.appendleft(msg)
         for channel in self.config.live_chans:
             irc_c.PRIVMSG(channel, msg)
 
